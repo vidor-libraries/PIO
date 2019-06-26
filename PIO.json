@@ -1,0 +1,50 @@
+{
+  "sc":{
+    "name":"PIO",
+    "include":"pio.h",
+    "uid":"PIO_UID",
+    "rpc":"pioRpc",
+    "ver":"PIO_VER",
+    "loop":""
+  },
+  "module":{
+    "name":"PIO",
+    "version":"1.0",
+    "className":"VidorIO",
+    "instanceName":"GPIO",
+    "description":"General purpose I/O",
+    "author":"",
+    "parameters":[
+      {"name":"BITS", "def":"32"},
+      {"name":"MUX_BITS", "def":"2"}
+    ]
+  },
+  "interfaces":[
+    {
+      "name":"pio",
+      "type":"output",
+      "mates":["pins"],
+      "parameters":["BITS", "MUX_BITS"],
+      "visibility":"1",
+      "signals": [
+        {"name":"out", "name_oe":"dir", "name_in":"in", "bits":"BITS", "direction":"bidir"},
+        {"name":"msel", "bits":"BITS * MUX_BITS", "direction":"output"}
+      ]
+    }
+  ],
+  "hw":[
+    {
+      "interface":"avalon_slave",
+      "name":"avalon_slave",
+      "parameters":[
+        {"signal":"address", "name":"SPAN", "value":"log2(4 + (31 + BITS * MUX_BITS) / 32)"},
+        {"signal":"read_data", "name":"BIT_WIDTH", "value":"32"},
+        {"signal":"write_data", "name":"BIT_WIDTH", "value":"32"}
+      ]
+    },
+    {
+      "interface":"pio",
+      "name":"pio"
+    }
+  ]
+}
